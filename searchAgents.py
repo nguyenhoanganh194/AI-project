@@ -503,30 +503,16 @@ def foodHeuristic(state, problem):
     position, foodGrid = state
     "*** YOUR CODE HERE ***"
     
-    def findClosestDot(check_position, foods):
-        closest_corner = foods[0]
-        closest_corner_distance = util.manhattanDistance(check_position, closest_corner)
-        for corner in foods[1:]:
-            distance_to_corner = util.manhattanDistance(check_position, corner)
-
-            if(distance_to_corner < closest_corner_distance):
-                closest_corner = corner
-                closest_corner_distance = distance_to_corner
-        return closest_corner, closest_corner_distance
-
-
-
-    foods = foodGrid.asList()    
+    foods_remain = foodGrid.asList()
     heuristic = 0
-    if(len(foods) <= 0):
+    distances = []
+    if(len(foods_remain) <=0):
         return heuristic
     
-    check_position = position
-    while len(foods) > 0:
-        closest_corner, closest_corner_distance = findClosestDot(check_position, foods)
-        heuristic += closest_corner_distance
-        foods.remove(closest_corner)
-        check_position = closest_corner
+    for food in foods_remain:
+        distances.append(util.manhattanDistance(position, food))
+    
+    heuristic = max(distances)
 
     return heuristic
 
