@@ -87,16 +87,89 @@ def depthFirstSearch(problem):
     print("Start's successors:", problem.getSuccessors(problem.getStartState()))
     """
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    from game import Directions
+    s = Directions.SOUTH
+    w = Directions.WEST
+    e = Directions.EAST
+    n = Directions.NORTH
+    stack = util.Stack()
+     
+
+    start = problem.getStartState()
+    stack.push(start)
+    game_path = [[]]
+
+    visited = set()
+    print("Start:", problem.getStartState())
+    print("Start's successors:", problem.getSuccessors(problem.getStartState()))
+    
+    result = []
+
+
+    while(True):
+        current_node = stack.pop()
+        current_path = game_path.pop()
+        print("========")
+        print(current_node)
+        print(current_path)
+        print("========")
+        if(current_node not in visited):
+            visited.add(current_node)
+
+            if(problem.isGoalState(current_node)):
+                print("Goal")
+                result = current_path
+                break
+
+            for neighbor in problem.getSuccessors(current_node):
+                if neighbor[0] not in visited:
+                    stack.push((neighbor[0]))
+                    game_path.append(current_path + [neighbor[1]])
+                    print("*******")
+                    print(neighbor[0])
+                    print("*******")
+
+            
+        if(stack.isEmpty()):
+            print("Can not find ")
+            break
+    
+    print(result)
+    return result
 
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    start = problem.getStartState()
+    queue = util.Queue()
+    path = util.Queue()
+    queue.push(start)
+    path.push([])
+    visited = set()
+    result = []
+    while queue.isEmpty() == False:
+        current_node = queue.pop()
+        current_path = path.pop()
+        if(current_node not in visited):
+            visited.add(current_node)
+
+            if(problem.isGoalState(current_node)):
+                print("Goal")
+                result = current_path
+                break
+
+            for neighbor in problem.getSuccessors(current_node):
+                if neighbor[0] not in visited:
+                    queue.push((neighbor[0]))
+                    path.push(current_path + [neighbor[1]])
+    
+    return result
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
     "*** YOUR CODE HERE ***"
+
+
     util.raiseNotDefined()
 
 def nullHeuristic(state, problem=None):
