@@ -337,7 +337,6 @@ class CornersProblem(search.SearchProblem):
             if(hitsWall == False):
                 nextPosition = (nextx, nexty)
                 passedCorners = list(state[1])
-                print(passedCorners)
                 if(nextPosition in self.corners and nextPosition not in passedCorners):
                     passedCorners.append(nextPosition)
 
@@ -379,7 +378,7 @@ def cornersHeuristic(state, problem):
     """
     corners = problem.corners # These are the corner coordinates
     walls = problem.walls # These are the walls of the maze, as a Grid (game.py)
-
+    
     "*** YOUR CODE HERE ***"
 
     unvisited_corners = []
@@ -409,7 +408,7 @@ def cornersHeuristic(state, problem):
         unvisited_corners.remove(closest_corner)
         check_position = closest_corner
 
-    return heuristic # Default to trivial solution
+    return heuristic 
 
 class AStarCornersAgent(SearchAgent):
     "A SearchAgent for FoodSearchProblem using A* and your foodHeuristic"
@@ -503,7 +502,33 @@ def foodHeuristic(state, problem):
     """
     position, foodGrid = state
     "*** YOUR CODE HERE ***"
-    return 0
+    
+    def findClosestDot(check_position, foods):
+        closest_corner = foods[0]
+        closest_corner_distance = util.manhattanDistance(check_position, closest_corner)
+        for corner in foods[1:]:
+            distance_to_corner = util.manhattanDistance(check_position, corner)
+
+            if(distance_to_corner < closest_corner_distance):
+                closest_corner = corner
+                closest_corner_distance = distance_to_corner
+        return closest_corner, closest_corner_distance
+
+
+
+    foods = foodGrid.asList()    
+    heuristic = 0
+    if(len(foods) <= 0):
+        return heuristic
+    
+    check_position = position
+    while len(foods) > 0:
+        closest_corner, closest_corner_distance = findClosestDot(check_position, foods)
+        heuristic += closest_corner_distance
+        foods.remove(closest_corner)
+        check_position = closest_corner
+
+    return heuristic
 
 class ClosestDotSearchAgent(SearchAgent):
     "Search for all food using a sequence of searches"
@@ -527,6 +552,7 @@ class ClosestDotSearchAgent(SearchAgent):
         Returns a path (a list of actions) to the closest dot, starting from
         gameState.
         """
+        print("call")
         # Here are some useful elements of the startState
         startPosition = gameState.getPacmanPosition()
         food = gameState.getFood()
@@ -534,7 +560,7 @@ class ClosestDotSearchAgent(SearchAgent):
         problem = AnyFoodSearchProblem(gameState)
 
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        return search.bfs(problem)
 
 class AnyFoodSearchProblem(PositionSearchProblem):
     """
@@ -570,7 +596,7 @@ class AnyFoodSearchProblem(PositionSearchProblem):
         x,y = state
 
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        return state in self.food.asList()
 
 def mazeDistance(point1, point2, gameState):
     """

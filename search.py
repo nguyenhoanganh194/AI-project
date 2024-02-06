@@ -100,24 +100,17 @@ def depthFirstSearch(problem):
     game_path = [[]]
 
     visited = set()
-    print("Start:", problem.getStartState())
-    print("Start's successors:", problem.getSuccessors(problem.getStartState()))
-    
     result = []
 
 
     while(True):
         current_node = stack.pop()
         current_path = game_path.pop()
-        print("========")
-        print(current_node)
-        print(current_path)
-        print("========")
+       
         if(current_node not in visited):
             visited.add(current_node)
 
             if(problem.isGoalState(current_node)):
-                print("Goal")
                 result = current_path
                 break
 
@@ -125,16 +118,13 @@ def depthFirstSearch(problem):
                 if neighbor[0] not in visited:
                     stack.push((neighbor[0]))
                     game_path.append(current_path + [neighbor[1]])
-                    print("*******")
-                    print(neighbor[0])
-                    print("*******")
+                   
 
             
         if(stack.isEmpty()):
             print("Can not find ")
             break
     
-    print(result)
     return result
 
 def breadthFirstSearch(problem):
@@ -150,12 +140,10 @@ def breadthFirstSearch(problem):
     while queue.isEmpty() == False:
         current_node = queue.pop()
         current_path = path.pop()
-        print(current_node)
         if(current_node not in visited):
             visited.add(current_node)
 
             if(problem.isGoalState(current_node)):
-                print("Goal")
                 result = current_path
                 break
 
@@ -173,7 +161,6 @@ def uniformCostSearch(problem):
     visited = set()
     start = problem.getStartState()
     heap.push([start,[], 0], 0)   # (node, action, costTo)
-    print(problem.goal)
     while heap.isEmpty() == False:
         current_node, current_path, cost = heap.pop()
 
@@ -181,7 +168,6 @@ def uniformCostSearch(problem):
             visited.add(current_node)
 
             if(problem.isGoalState(current_node)):
-                print("Goal")
                 result = current_path
                 break
             
@@ -200,10 +186,7 @@ def nullHeuristic(state, problem=None):
     A heuristic function estimates the cost from the current state to the nearest
     goal in the provided SearchProblem.  This heuristic is trivial.
     """
-    print(state)
-    current_node = state
-    goal = problem.goal
-    return abs(current_node[0] - goal[0]) + abs(current_node[1] - goal[1])
+    return 0
 
 def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
@@ -219,7 +202,6 @@ def aStarSearch(problem, heuristic=nullHeuristic):
             visited.add(current_node)
 
             if(problem.isGoalState(current_node)):
-                print("Goal")
                 result = current_path
                 break
             
