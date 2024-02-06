@@ -168,21 +168,69 @@ def breadthFirstSearch(problem):
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
     "*** YOUR CODE HERE ***"
+    heap = util.PriorityQueue()
+    visited = set()
+    start = problem.getStartState()
+    heap.push([start,[], 0], 0)   # (node, action, costTo)
+    print(problem.goal)
+    while heap.isEmpty() == False:
+        current_node, current_path, cost = heap.pop()
+
+        if(current_node not in visited):
+            visited.add(current_node)
+
+            if(problem.isGoalState(current_node)):
+                print("Goal")
+                result = current_path
+                break
+            
+            for neighbor in problem.getSuccessors(current_node):
+                if neighbor[0] not in visited:
+                    new_cost = cost + neighbor[2]
+                    heap_item = [neighbor[0], current_path + [neighbor[1]], new_cost]
+                    heap.push(heap_item,new_cost)
+
+    return result
 
 
-    util.raiseNotDefined()
 
 def nullHeuristic(state, problem=None):
     """
     A heuristic function estimates the cost from the current state to the nearest
     goal in the provided SearchProblem.  This heuristic is trivial.
     """
-    return 0
+    print(state)
+    current_node = state
+    goal = problem.goal
+    return abs(current_node[0] - goal[0]) + abs(current_node[1] - goal[1])
 
 def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    heap = util.PriorityQueue()
+    visited = set()
+    start = problem.getStartState()
+    heap.push([start,[], 0], 0)   # (node, action, priority)
+    while heap.isEmpty() == False:
+        current_node, current_path, priority = heap.pop()
+
+        if(current_node not in visited):
+            visited.add(current_node)
+
+            if(problem.isGoalState(current_node)):
+                print("Goal")
+                result = current_path
+                break
+            
+            for neighbor in problem.getSuccessors(current_node):
+                if neighbor[0] not in visited:
+                    new_cost = (
+                        priority - heuristic(current_node, problem) + neighbor[2] + heuristic(neighbor[0], problem)
+                    )
+                    heap_item = [neighbor[0], current_path + [neighbor[1]], new_cost]
+                    heap.push(heap_item,new_cost)
+
+    return result
 
 
 # Abbreviations
