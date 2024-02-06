@@ -150,6 +150,7 @@ def breadthFirstSearch(problem):
     while queue.isEmpty() == False:
         current_node = queue.pop()
         current_path = path.pop()
+        print(current_node)
         if(current_node not in visited):
             visited.add(current_node)
 
